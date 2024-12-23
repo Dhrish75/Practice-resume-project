@@ -1,17 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+//
+const express = require('express')
+const mongoose = require('mongoose')
+const cors = require("cors")
+const employeemodel = require('./models/employee')
 
+const app = express()
+app.use(express.json())
+app.use(cors())
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+mongoose.connect("mongodb://localhost:27017/employee");
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+app.post('/register',(req,res) => {
+    employeemodel.create(req.body)
+    .then(employees => res.json(employees))
+    .catch(err => res.json(err))
 
+})
+
+app.listen(3001, () => {
+    console.log("server is running")
+
+})
